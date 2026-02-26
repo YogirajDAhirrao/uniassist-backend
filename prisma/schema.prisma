@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  passwordHash  String
+  role          Role
+  documents     Document[]
+  sessions      ChatSession[]
+  refreshTokens RefreshToken[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum Role {
+  student
+  admin
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Document {
+  id          String           @id @default(uuid())
+  title       String
+  fileUrl     String
+  fileType    String?
+  uploadedBy  User             @relation(fields: [uploadedById], references: [id])
+  uploadedById String
+  chunks      DocumentChunk[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model DocumentChunk {
+  id          String    @id @default(uuid())
+  document    Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId  String
+  chunkIndex  Int
+  content     String
+  createdAt   DateTime  @default(now())
+}
+
+model ChatSession {
+  id        String        @id @default(uuid())
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now())
+}
+
+model ChatMessage {
+  id        String      @id @default(uuid())
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  role      MessageRole
+  content   String
+  createdAt DateTime    @default(now())
+}
+
+enum MessageRole {
+  user
+  assistant
+}
