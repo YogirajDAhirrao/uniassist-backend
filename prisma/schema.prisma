@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+ output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -32,12 +32,16 @@ enum Role {
 }
 
 model RefreshToken {
-  id        String   @id @default(uuid())
-  token     String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  tokenHash   String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  expiresAt   DateTime
+  revoked     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  ipAddress   String?
+  userAgent   String?
 }
 
 model Document {
@@ -59,6 +63,8 @@ model DocumentChunk {
   chunkIndex  Int
   content     String
   createdAt   DateTime  @default(now())
+  @@index([documentId])
+  @@unique([documentId, chunkIndex])
 }
 
 model ChatSession {

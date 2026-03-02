@@ -1,10 +1,9 @@
 import express from "express";
-import cors from "cors";
+import app from "./app.js";
 
-const app = express();
-
-app.get("/",(req,res)=> res.send("Hey") )
-app.listen(3001,()=>{
-    console.log("Started");
-    
-})
+app.get("/", (req, res) => {
+  res.send("Test");
+});
+app.listen(3001, () => {
+  console.log("Started");
+});
