@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service.js";
+import { log } from "node:console";
 
 const ALLOWED_ROLES = ["student", "admin"];
+const isProd = process.env.NODE_ENV === "production";
 
 const authService = new AuthService();
 
@@ -18,8 +20,8 @@ export const register = async (req: Request, res: Response) => {
 
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "strict",
+      secure: isProd,
+      sameSite: isProd ? "strict" : "lax",
     });
 
     return res.status(201).json({
@@ -39,8 +41,8 @@ export const login = async (req: Request, res: Response) => {
 
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "strict",
+      secure: isProd,
+      sameSite: isProd ? "strict" : "lax",
     });
 
     return res.status(201).json({
@@ -58,6 +60,7 @@ export const logout = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) throw new Error("No Refresh token provided");
     const result = await authService.logout(refreshToken);
+    res.clearCookie("refreshToken");
     res.json({
       message: "success",
     });
@@ -68,7 +71,11 @@ export const logout = async (req: Request, res: Response) => {
 
 export const refresh = async (req: Request, res: Response) => {
   try {
+    console.log("cookies:", req.cookies);
+    console.log("refreshToken:", req.cookies?.refreshToken);
+
     const refreshToken = req.cookies.refreshToken;
+    console.log(refreshToken);
     const result = await authService.refresh(refreshToken);
     return res.status(201).json({
       message: "success",

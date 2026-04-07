@@ -9,6 +9,6 @@ router.post("/login", login);
 router.post("/refresh", refresh);
 
 // Require access token for logout
-router.post("/logout", authenticate, logout);
+router.post("/logout", logout);
 
 export default router;

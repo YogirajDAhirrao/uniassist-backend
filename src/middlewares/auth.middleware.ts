@@ -14,7 +14,8 @@ export const authenticate = (
   next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
-
+  console.log(req.cookies);
+  console.log(authHeader, "Auth Header");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({
       message: "Unauthorized - No token provided",
@@ -23,11 +24,18 @@ export const authenticate = (
 
   const token = authHeader.split(" ")[1];
 
+  console.log(token);
+  console.log("HEADER:", req.headers.authorization);
+  console.log("TOKEN:", token);
+  console.log("SECRET:", process.env.ACCESS_SECRET);
+
   try {
-    const decoded = jwt.verify(token, process.env.ACCESS_SECRET!) as {
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as {
       userId: string;
       role: string;
     };
+
+    console.log(decoded);
 
     req.user = decoded;
 

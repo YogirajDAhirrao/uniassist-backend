@@ -327,4 +327,80 @@ If you want next, I can:
 * Give you **TypeScript folder structure**
 * Write **starter code for document ingestion & search**
 
+backend/
+│
+├── src/
+│   │
+│   ├── app.ts
+│   ├── server.ts
+│   │
+│   ├── config/
+│   │   ├── env.ts
+│   │   ├── db.ts
+│   │   ├── redis.ts
+│   │   ├── vector.ts
+│   │   └── logger.ts
+│   │
+│   ├── modules/
+│   │   ├── auth/
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── auth.repository.ts
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── auth.types.ts
+│   │   │   └── auth.validation.ts
+│   │   │
+│   │   ├── users/
+│   │   ├── documents/
+│   │   ├── chat/
+│   │   ├── search/
+│   │   ├── syllabus/
+│   │   ├── analytics/
+│   │   └── admin/
+│   │
+│   ├── lib/
+│   │   ├── llm/
+│   │   │   ├── openai.client.ts
+│   │   │   ├── prompt.builder.ts
+│   │   │   └── guardrails.ts
+│   │   │
+│   │   ├── embeddings/
+│   │   │   ├── embed.service.ts
+│   │   │   └── chunker.ts
+│   │   │
+│   │   ├── ocr/
+│   │   └── pdf/
+│   │
+│   ├── jobs/
+│   │   ├── ingestion.job.ts
+│   │   ├── embedding.job.ts
+│   │   └── queue.ts
+│   │
+│   ├── middlewares/
+│   │   ├── auth.middleware.ts
+│   │   ├── error.middleware.ts
+│   │   ├── rateLimit.middleware.ts
+│   │   └── requestLogger.middleware.ts
+│   │
+│   ├── utils/
+│   │   ├── apiResponse.ts
+│   │   ├── constants.ts
+│   │   └── helpers.ts
+│   │
+│   ├── types/
+│   │   └── global.d.ts
+│   │
+│   └── routes.ts
+│
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+│
+├── tests/
+│
+├── .env
+├── package.json
+├── tsconfig.json
+└── README.md
+
 Just tell me what you want to build first 🔥
