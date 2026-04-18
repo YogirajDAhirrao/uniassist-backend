@@ -27,7 +27,7 @@ export const authenticate = (
   console.log(token);
   console.log("HEADER:", req.headers.authorization);
   console.log("TOKEN:", token);
-  console.log("SECRET:", process.env.ACCESS_SECRET);
+  
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as {
@@ -49,6 +49,8 @@ export const authenticate = (
 
 export const authorize = (allowedRoles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
+    console.log(req.user);
+
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }

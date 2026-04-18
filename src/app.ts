@@ -5,6 +5,7 @@ import "dotenv/config";
 
 import authRoutes from "./modules/auth/auth.router.js";
 import userRoutes from "./modules/users/users.router.js";
+import documentRoutes from "./modules/documents/documentts.router.js";
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/get-users", userRoutes);
+app.use("/api/document", documentRoutes);
 
 export default app;
