@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import "dotenv/config";

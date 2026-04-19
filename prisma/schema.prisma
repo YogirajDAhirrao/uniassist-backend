@@ -48,6 +48,7 @@ model Document {
   id          String           @id @default(uuid())
   title       String
   fileUrl     String
+  publicId    String
   fileType    String?
   uploadedBy  User             @relation(fields: [uploadedById], references: [id])
   uploadedById String
