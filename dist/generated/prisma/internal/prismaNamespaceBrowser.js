@@ -78,6 +78,7 @@ export const DocumentScalarFieldEnum = {
     id: 'id',
     title: 'title',
     fileUrl: 'fileUrl',
+    publicId: 'publicId',
     fileType: 'fileType',
     uploadedById: 'uploadedById',
     createdAt: 'createdAt',
