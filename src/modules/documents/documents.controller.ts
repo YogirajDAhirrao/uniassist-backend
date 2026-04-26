@@ -1,3 +1,4 @@
+import https from "https";
 import { Request, Response } from "express";
 import { DocumentService } from "./documents.service.js";
 
@@ -20,7 +21,7 @@ export const uploadDocument = async (req: any, res: Response) => {
     const document = await documentService.uploadDocument(
       file,
       title,
-      req.user.userId
+      req.user.userId,
     );
 
     return res.status(201).json({
@@ -29,5 +30,25 @@ export const uploadDocument = async (req: any, res: Response) => {
     });
   } catch (error: any) {
     return res.status(400).json({ message: error.message });
+  }
+};
+
+export const downloadDocument = async (req: any, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { url, fileName, contentType } =
+      await documentService.getDocumentStream(id);
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+
+    https
+      .get(url, (fileRes) => {
+        fileRes.pipe(res);
+      })
+      .on("error", (err) => {
+        res.status(500).json({ message: "Download failed" });
+      });
+  } catch (error: any) {
+    res.status(404).json({ message: error.message });
   }
 };

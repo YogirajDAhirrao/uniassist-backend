@@ -1,9 +1,14 @@
+import { url } from "node:inspector";
 import { prisma } from "../../lib/prisma.js";
 import cloudinary from "../../utils/cloudinary.js";
 import streamifier from "streamifier";
 
 export class DocumentService {
-  async uploadDocument(file: Express.Multer.File, title: string, userId: string) {
+  async uploadDocument(
+    file: Express.Multer.File,
+    title: string,
+    userId: string,
+  ) {
     if (!file) throw new Error("No file provided");
     if (!title) throw new Error("Title is required");
 
@@ -23,11 +28,11 @@ export class DocumentService {
               url: result.secure_url,
               public_id: result.public_id,
             });
-          }
+          },
         );
 
         streamifier.createReadStream(file.buffer).pipe(uploadStream);
-      }
+      },
     );
 
     // 2️⃣ Save in DB
@@ -42,5 +47,19 @@ export class DocumentService {
     });
 
     return document;
+  }
+  async getDocumentStream(documentId: string) {
+    const document = await prisma.document.findUnique({
+      where: { id: documentId },
+    });
+
+    if (!document) {
+      throw new Error("Document Not Found");
+    }
+    return {
+      url: document.fileUrl,
+      fileName: document.title + ".pdf",
+      contentType: document.fileType || "application/pdf",
+    };
   }
 }
