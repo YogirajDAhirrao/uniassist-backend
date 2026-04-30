@@ -1,3 +1,4 @@
+import https from "https";
 import { DocumentService } from "./documents.service.js";
 const documentService = new DocumentService();
 export const uploadDocument = async (req, res) => {
@@ -19,6 +20,24 @@ export const uploadDocument = async (req, res) => {
     }
     catch (error) {
         return res.status(400).json({ message: error.message });
+    }
+};
+export const downloadDocument = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { url, fileName, contentType } = await documentService.getDocumentStream(id);
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+        https
+            .get(url, (fileRes) => {
+            fileRes.pipe(res);
+        })
+            .on("error", (err) => {
+            res.status(500).json({ message: "Download failed" });
+        });
+    }
+    catch (error) {
+        res.status(404).json({ message: error.message });
     }
 };
 //# sourceMappingURL=documents.controller.js.map

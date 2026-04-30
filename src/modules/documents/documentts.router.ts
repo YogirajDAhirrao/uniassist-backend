@@ -37,6 +37,7 @@ router.get(
     next();
   },
   downloadDocument,
+  
 );
 
 export default router;

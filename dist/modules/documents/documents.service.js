@@ -1,6 +1,7 @@
-import { prisma } from "../../lib/prisma.js";
 import cloudinary from "../../utils/cloudinary.js";
 import streamifier from "streamifier";
+import https from "https";
+import { prisma } from "../../lib/prisma.js";
 export class DocumentService {
     async uploadDocument(file, title, userId) {
         if (!file)
@@ -35,6 +36,37 @@ export class DocumentService {
             },
         });
         return document;
+    }
+    async getDocumentStream(documentId) {
+        const document = await prisma.document.findUnique({
+            where: { id: documentId },
+        });
+        if (!document) {
+            throw new Error("Document Not Found");
+        }
+        return {
+            url: document.fileUrl,
+            fileName: document.title + ".pdf",
+            contentType: document.fileType || "application/pdf",
+        };
+    }
+    // FOR INGESTION PURPOSES ONLY
+    async fetchDocumentBuffer(documentId) {
+        const document = await prisma.document.findUnique({
+            where: { id: documentId },
+        });
+        if (!document)
+            throw new Error("Document Not Found");
+        return new Promise((resolve, reject) => {
+            https
+                .get(document.fileUrl, (res) => {
+                const chunks = [];
+                res.on("data", (chunk) => chunks.push(chunk));
+                res.on("end", () => resolve(Buffer.concat(chunks)));
+                res.on("error", reject);
+            })
+                .on("error", reject);
+        });
     }
 }
 //# sourceMappingURL=documents.service.js.map
