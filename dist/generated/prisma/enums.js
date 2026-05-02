@@ -15,4 +15,9 @@ export const MessageRole = {
     user: 'user',
     assistant: 'assistant'
 };
+export const DocumentStatus = {
+    PROCESSING: 'PROCESSING',
+    READY: 'READY',
+    FAILED: 'FAILED'
+};
 //# sourceMappingURL=enums.js.map
