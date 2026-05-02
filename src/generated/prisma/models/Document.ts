@@ -31,6 +31,7 @@ export type DocumentMinAggregateOutputType = {
   publicId: string | null
   fileType: string | null
   uploadedById: string | null
+  status: $Enums.DocumentStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +43,7 @@ export type DocumentMaxAggregateOutputType = {
   publicId: string | null
   fileType: string | null
   uploadedById: string | null
+  status: $Enums.DocumentStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,6 +55,7 @@ export type DocumentCountAggregateOutputType = {
   publicId: number
   fileType: number
   uploadedById: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -66,6 +69,7 @@ export type DocumentMinAggregateInputType = {
   publicId?: true
   fileType?: true
   uploadedById?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,6 +81,7 @@ export type DocumentMaxAggregateInputType = {
   publicId?: true
   fileType?: true
   uploadedById?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type DocumentCountAggregateInputType = {
   publicId?: true
   fileType?: true
   uploadedById?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +178,7 @@ export type DocumentGroupByOutputType = {
   publicId: string
   fileType: string | null
   uploadedById: string
+  status: $Enums.DocumentStatus
   createdAt: Date
   updatedAt: Date
   _count: DocumentCountAggregateOutputType | null
@@ -204,6 +211,7 @@ export type DocumentWhereInput = {
   publicId?: Prisma.StringFilter<"Document"> | string
   fileType?: Prisma.StringNullableFilter<"Document"> | string | null
   uploadedById?: Prisma.StringFilter<"Document"> | string
+  status?: Prisma.EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -217,6 +225,7 @@ export type DocumentOrderByWithRelationInput = {
   publicId?: Prisma.SortOrder
   fileType?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   uploadedBy?: Prisma.UserOrderByWithRelationInput
@@ -233,6 +242,7 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   publicId?: Prisma.StringFilter<"Document"> | string
   fileType?: Prisma.StringNullableFilter<"Document"> | string | null
   uploadedById?: Prisma.StringFilter<"Document"> | string
+  status?: Prisma.EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -246,6 +256,7 @@ export type DocumentOrderByWithAggregationInput = {
   publicId?: Prisma.SortOrder
   fileType?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DocumentCountOrderByAggregateInput
@@ -263,6 +274,7 @@ export type DocumentScalarWhereWithAggregatesInput = {
   publicId?: Prisma.StringWithAggregatesFilter<"Document"> | string
   fileType?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   uploadedById?: Prisma.StringWithAggregatesFilter<"Document"> | string
+  status?: Prisma.EnumDocumentStatusWithAggregatesFilter<"Document"> | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
 }
@@ -273,6 +285,7 @@ export type DocumentCreateInput = {
   fileUrl: string
   publicId: string
   fileType?: string | null
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   uploadedBy: Prisma.UserCreateNestedOneWithoutDocumentsInput
@@ -286,6 +299,7 @@ export type DocumentUncheckedCreateInput = {
   publicId: string
   fileType?: string | null
   uploadedById: string
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.DocumentChunkUncheckedCreateNestedManyWithoutDocumentInput
@@ -297,6 +311,7 @@ export type DocumentUpdateInput = {
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
@@ -310,6 +325,7 @@ export type DocumentUncheckedUpdateInput = {
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.DocumentChunkUncheckedUpdateManyWithoutDocumentNestedInput
@@ -322,6 +338,7 @@ export type DocumentCreateManyInput = {
   publicId: string
   fileType?: string | null
   uploadedById: string
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -332,6 +349,7 @@ export type DocumentUpdateManyMutationInput = {
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -343,6 +361,7 @@ export type DocumentUncheckedUpdateManyInput = {
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -364,6 +383,7 @@ export type DocumentCountOrderByAggregateInput = {
   publicId?: Prisma.SortOrder
   fileType?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -375,6 +395,7 @@ export type DocumentMaxOrderByAggregateInput = {
   publicId?: Prisma.SortOrder
   fileType?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -386,6 +407,7 @@ export type DocumentMinOrderByAggregateInput = {
   publicId?: Prisma.SortOrder
   fileType?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -437,6 +459,10 @@ export type DocumentUncheckedUpdateManyWithoutUploadedByNestedInput = {
   deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
+export type EnumDocumentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.DocumentStatus
+}
+
 export type DocumentCreateNestedOneWithoutChunksInput = {
   create?: Prisma.XOR<Prisma.DocumentCreateWithoutChunksInput, Prisma.DocumentUncheckedCreateWithoutChunksInput>
   connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutChunksInput
@@ -457,6 +483,7 @@ export type DocumentCreateWithoutUploadedByInput = {
   fileUrl: string
   publicId: string
   fileType?: string | null
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.DocumentChunkCreateNestedManyWithoutDocumentInput
@@ -468,6 +495,7 @@ export type DocumentUncheckedCreateWithoutUploadedByInput = {
   fileUrl: string
   publicId: string
   fileType?: string | null
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.DocumentChunkUncheckedCreateNestedManyWithoutDocumentInput
@@ -509,6 +537,7 @@ export type DocumentScalarWhereInput = {
   publicId?: Prisma.StringFilter<"Document"> | string
   fileType?: Prisma.StringNullableFilter<"Document"> | string | null
   uploadedById?: Prisma.StringFilter<"Document"> | string
+  status?: Prisma.EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
 }
@@ -519,6 +548,7 @@ export type DocumentCreateWithoutChunksInput = {
   fileUrl: string
   publicId: string
   fileType?: string | null
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   uploadedBy: Prisma.UserCreateNestedOneWithoutDocumentsInput
@@ -531,6 +561,7 @@ export type DocumentUncheckedCreateWithoutChunksInput = {
   publicId: string
   fileType?: string | null
   uploadedById: string
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -557,6 +588,7 @@ export type DocumentUpdateWithoutChunksInput = {
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
@@ -569,6 +601,7 @@ export type DocumentUncheckedUpdateWithoutChunksInput = {
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -579,6 +612,7 @@ export type DocumentCreateManyUploadedByInput = {
   fileUrl: string
   publicId: string
   fileType?: string | null
+  status?: $Enums.DocumentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -589,6 +623,7 @@ export type DocumentUpdateWithoutUploadedByInput = {
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.DocumentChunkUpdateManyWithoutDocumentNestedInput
@@ -600,6 +635,7 @@ export type DocumentUncheckedUpdateWithoutUploadedByInput = {
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.DocumentChunkUncheckedUpdateManyWithoutDocumentNestedInput
@@ -611,6 +647,7 @@ export type DocumentUncheckedUpdateManyWithoutUploadedByInput = {
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -653,6 +690,7 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   publicId?: boolean
   fileType?: boolean
   uploadedById?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -667,6 +705,7 @@ export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   publicId?: boolean
   fileType?: boolean
   uploadedById?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -679,6 +718,7 @@ export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   publicId?: boolean
   fileType?: boolean
   uploadedById?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -691,11 +731,12 @@ export type DocumentSelectScalar = {
   publicId?: boolean
   fileType?: boolean
   uploadedById?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "fileUrl" | "publicId" | "fileType" | "uploadedById" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "fileUrl" | "publicId" | "fileType" | "uploadedById" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   chunks?: boolean | Prisma.Document$chunksArgs<ExtArgs>
@@ -721,6 +762,7 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     publicId: string
     fileType: string | null
     uploadedById: string
+    status: $Enums.DocumentStatus
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["document"]>
@@ -1154,6 +1196,7 @@ export interface DocumentFieldRefs {
   readonly publicId: Prisma.FieldRef<"Document", 'String'>
   readonly fileType: Prisma.FieldRef<"Document", 'String'>
   readonly uploadedById: Prisma.FieldRef<"Document", 'String'>
+  readonly status: Prisma.FieldRef<"Document", 'DocumentStatus'>
   readonly createdAt: Prisma.FieldRef<"Document", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Document", 'DateTime'>
 }

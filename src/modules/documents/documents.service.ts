@@ -3,6 +3,7 @@ import streamifier from "streamifier";
 import https from "https";
 
 import { prisma } from "../../lib/prisma.js";
+import { IngestionService } from "../ingestion/ingestion.service.js";
 
 export class DocumentService {
   async uploadDocument(
@@ -46,6 +47,17 @@ export class DocumentService {
         uploadedById: userId,
       },
     });
+
+    const ingestionService = new IngestionService();
+
+    ingestionService
+      .processDocument(document.id)
+      .then(() => {
+        console.log("Ingestion Completed:", document.id);
+      })
+      .catch((err) => {
+        console.error("Ingestion Failed", err);
+      });
 
     return document;
   }

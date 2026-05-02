@@ -3,7 +3,7 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+  
 generator client {
   provider = "prisma-client"
  output   = "../src/generated/prisma"
@@ -52,6 +52,7 @@ model Document {
   fileType    String?
   uploadedBy  User             @relation(fields: [uploadedById], references: [id])
   uploadedById String
+  status DocumentStatus @default(PROCESSING)
   chunks      DocumentChunk[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
@@ -88,4 +89,9 @@ model ChatMessage {
 enum MessageRole {
   user
   assistant
+}
+enum DocumentStatus {
+  PROCESSING
+  READY
+  FAILED
 }

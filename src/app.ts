@@ -7,6 +7,7 @@ import authRoutes from "./modules/auth/auth.router.js";
 import userRoutes from "./modules/users/users.router.js";
 import documentRoutes from "./modules/documents/documentts.router.js";
 import chatRouter from "./modules/chat/chat.router.js";
+import { initQdrant } from "./utils/qdrant-init.js";
 
 const app = express();
 

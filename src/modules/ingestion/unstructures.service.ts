@@ -14,11 +14,11 @@ export class UnstructuredService {
       const req = https.request(
         {
           method: "POST",
-          hostname: "api.unstructured.io",
+          hostname: "api.unstructuredapp.io",
           path: "/general/v0/general",
           headers: {
             ...formData.getHeaders(),
-            Authorization: `Bearer ${process.env.UNSTRUCTURED_API_KEY}`,
+            "unstructured-api-key": process.env.UNSTRUCTURED_API_KEY,
           },
         },
         (res) => {

@@ -6,6 +6,7 @@ import { UnstructuredService } from "./unstructures.service.js";
 import { processText } from "../../utils/processText.js";
 import { prisma } from "../../lib/prisma.js";
 import { getEmbedding } from "./embedding.service.js";
+import { qdrantClient } from "../../lib/qdrant.js";
 
 export class IngestionService {
   async processDocument(documentId: string) {
@@ -40,21 +41,69 @@ export class IngestionService {
       console.log("Chunks stored:", createdChunks.length);
 
       // 5. generate embeddings
-      // and store
-      const points = [];
-      for (const chunk of createdChunks) {
-        const embedding = await getEmbedding(chunk.content);
-        points.push({
-          id: chunk.id,
-          vector: embedding,
-          payload: {
-            documentId: chunk.documentId,
-            chunkIndex: chunk.chunkIndex,
+      const embeddings = await Promise.all(
+        createdChunks.map((chunk) => getEmbedding(chunk.content)),
+      );
+      // build points
+      const points = createdChunks.map((chunk, i) => ({
+        id: chunk.id,
+        vector: embeddings[i],
+        payload: {
+          documentId: chunk.documentId,
+          chunkIndex: chunk.chunkIndex,
+        },
+      }));
+
+      // 6. store in vector DB
+      const COLLECTION = "documents";
+      // ensure collection
+      try {
+        await qdrantClient.getCollection(COLLECTION);
+        await qdrantClient.createPayloadIndex(COLLECTION, {
+          field_name: "documentId",
+          field_schema: "keyword", // or "uuid"
+        });
+      } catch {
+        await qdrantClient.createCollection(COLLECTION, {
+          vectors: {
+            size: 3072,
+            distance: "Cosine",
           },
         });
       }
 
-      // 6. store in vector DB
-    } catch (error) {}
+      // delete old vectors for this document
+      await qdrantClient.delete(COLLECTION, {
+        filter: {
+          must: [
+            {
+              key: "documentId",
+              match: { value: documentId },
+            },
+          ],
+        },
+      });
+
+      // upsert new vectors
+      await qdrantClient.upsert(COLLECTION, {
+        points,
+      });
+
+      console.log("Embeddings stored in Qdrant:", points.length);
+
+      await prisma.document.update({
+        where: { id: documentId },
+        data: { status: "READY" },
+      });
+      console.log("Document READY:", documentId);
+    } catch (error) {
+      console.error("Ingestion error:", error);
+
+      //  MARK AS FAILED
+      await prisma.document.update({
+        where: { id: documentId },
+        data: { status: "FAILED" },
+      });
+    }
   }
 }
