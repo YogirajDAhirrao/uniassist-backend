@@ -27,7 +27,6 @@ export const authenticate = (
   console.log(token);
   console.log("HEADER:", req.headers.authorization);
   console.log("TOKEN:", token);
-  
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as {

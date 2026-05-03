@@ -1,5 +1,3 @@
-import https from "https";
-import FormData from "form-data";
 
 import { DocumentService } from "../documents/documents.service.js";
 import { UnstructuredService } from "./unstructures.service.js";
@@ -51,6 +49,7 @@ export class IngestionService {
         payload: {
           documentId: chunk.documentId,
           chunkIndex: chunk.chunkIndex,
+          content: chunk.content,
         },
       }));
 

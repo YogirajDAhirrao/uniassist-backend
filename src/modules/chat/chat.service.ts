@@ -1,5 +1,7 @@
 import Groq from "groq-sdk";
 import { prisma } from "../../lib/prisma.js";
+import { getEmbedding } from "../ingestion/embedding.service.js";
+import { qdrantClient } from "../../lib/qdrant.js";
 import {
   ChatMessageResponse,
   ChatSessionWithMessages,
@@ -9,9 +11,8 @@ import {
 
 const MODEL = "llama-3.3-70b-versatile";
 const MAX_HISTORY_MESSAGES = 20;
-
-const SYSTEM_PROMPT = `You are a helpful AI assistant. Answer questions clearly and concisely.
-If you don't know something, say so honestly.`;
+const TOP_K_CHUNKS = 4;
+const COLLECTION = "documents";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY!,
@@ -33,9 +34,7 @@ export class ChatService {
   ): Promise<ChatSessionWithMessages> {
     const session = await prisma.chatSession.findFirst({
       where: { id: sessionId, userId },
-      include: {
-        messages: { orderBy: { createdAt: "asc" } },
-      },
+      include: { messages: { orderBy: { createdAt: "asc" } } },
     });
 
     if (!session) throw new Error("Session not found");
@@ -70,9 +69,6 @@ export class ChatService {
 
   // ── Messaging ───────────────────────────────────────────────────────────────
 
-  /**
-   * Send a message and get a full (non-streaming) response.
-   */
   async sendMessage(
     sessionId: string,
     userId: string,
@@ -80,24 +76,30 @@ export class ChatService {
   ): Promise<ChatMessageResponse> {
     await this.assertSessionOwner(sessionId, userId);
 
-    // Persist user message
+    // 1. Fetch history BEFORE saving the new user message
+    const messages = await this.buildMessagesWithContext(
+      sessionId,
+      userContent,
+    );
+
+    // 2. Save user message AFTER building history
     await prisma.chatMessage.create({
       data: { sessionId, role: "user", content: userContent },
     });
 
-    // Build history for context
-    const history = await this.buildMessageHistory(sessionId);
-
-    // Call Groq
     try {
       const response = await groq.chat.completions.create({
         model: MODEL,
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
+        messages,
       });
 
       const assistantContent = response.choices[0].message.content ?? "";
 
-      // Persist assistant reply
+      // 3. Only save non-empty responses
+      if (!assistantContent.trim()) {
+        throw new Error("Received empty response from AI");
+      }
+
       const saved = await prisma.chatMessage.create({
         data: { sessionId, role: "assistant", content: assistantContent },
       });
@@ -116,10 +118,6 @@ export class ChatService {
     }
   }
 
-  /**
-   * Send a message and stream the response back via an async generator.
-   * The assistant message is persisted once the full stream completes.
-   */
   async *streamMessage(
     sessionId: string,
     userId: string,
@@ -127,18 +125,23 @@ export class ChatService {
   ): AsyncGenerator<StreamChunk> {
     await this.assertSessionOwner(sessionId, userId);
 
+    // 1. Fetch history BEFORE saving the new user message
+    const messages = await this.buildMessagesWithContext(
+      sessionId,
+      userContent,
+    );
+
+    // 2. Save user message AFTER building history
     await prisma.chatMessage.create({
       data: { sessionId, role: "user", content: userContent },
     });
-
-    const history = await this.buildMessageHistory(sessionId);
 
     let fullContent = "";
 
     try {
       const stream = await groq.chat.completions.create({
         model: MODEL,
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
+        messages,
         stream: true,
       });
 
@@ -150,10 +153,12 @@ export class ChatService {
         }
       }
 
-      // Persist the complete assistant message after stream ends
-      await prisma.chatMessage.create({
-        data: { sessionId, role: "assistant", content: fullContent },
-      });
+      // 3. Only save non-empty responses
+      if (fullContent.trim()) {
+        await prisma.chatMessage.create({
+          data: { sessionId, role: "assistant", content: fullContent },
+        });
+      }
 
       yield { type: "done" };
     } catch (err: any) {
@@ -169,7 +174,88 @@ export class ChatService {
     }
   }
 
-  // ── Helpers ─────────────────────────────────────────────────────────────────
+  // ── RAG + History ───────────────────────────────────────────────────────────
+
+  private async buildMessagesWithContext(
+    sessionId: string,
+    userQuestion: string,
+  ): Promise<
+    Array<{ role: "system" | "user" | "assistant"; content: string }>
+  > {
+    // 1. Retrieve relevant chunks from Qdrant
+    const context = await this.retrieveContext(userQuestion);
+
+    // 2. Build system prompt
+    const systemContent = context
+      ? `You are a helpful AI assistant. Answer questions based on the provided context.
+If the answer is not in the context, answer from your general knowledge but mention it.
+Always be clear and concise.
+
+CONTEXT FROM DOCUMENTS:
+${context}`
+      : `You are a helpful AI assistant. Answer questions clearly and concisely.
+If you don't know something, say so honestly.`;
+
+    // 3. Fetch existing history (does NOT include current message yet)
+    const history = await this.buildMessageHistory(sessionId);
+
+    // 4. Append current user question at the end
+    return [
+      { role: "system", content: systemContent },
+      ...history,
+      { role: "user", content: userQuestion },
+    ];
+  }
+
+  private async retrieveContext(question: string): Promise<string | null> {
+    try {
+      const questionVector = await getEmbedding(question);
+
+      const results = await qdrantClient.search(COLLECTION, {
+        vector: questionVector,
+        limit: TOP_K_CHUNKS,
+        with_payload: true,
+        score_threshold: 0.5,
+      });
+
+      if (!results || results.length === 0) return null;
+
+      const contextText = results
+        .map((r, i) => {
+          const payload = r.payload as {
+            content?: string;
+            documentId?: string;
+            chunkIndex?: number;
+          };
+          return `[${i + 1}] ${payload.content ?? ""}`;
+        })
+        .filter((text) => text.trim().length > 4)
+        .join("\n\n");
+
+      return contextText || null;
+    } catch (err) {
+      console.error("[RAG] Context retrieval failed:", err);
+      return null;
+    }
+  }
+
+  private async buildMessageHistory(
+    sessionId: string,
+  ): Promise<Array<{ role: "user" | "assistant"; content: string }>> {
+    const messages = await prisma.chatMessage.findMany({
+      where: {
+        sessionId,
+        content: { not: "" }, // ← skip empty messages from previous failed attempts
+      },
+      orderBy: { createdAt: "asc" },
+      take: MAX_HISTORY_MESSAGES,
+    });
+
+    return messages.map((m) => ({
+      role: m.role as "user" | "assistant",
+      content: m.content,
+    }));
+  }
 
   private async assertSessionOwner(
     sessionId: string,
@@ -179,25 +265,5 @@ export class ChatService {
       where: { id: sessionId, userId },
     });
     if (!session) throw new Error("Session not found or access denied");
-  }
-
-  /**
-   * Returns the last MAX_HISTORY_MESSAGES messages formatted for the Groq API.
-   * NOTE: When you add RAG later, inject retrieved context into the last user
-   * message content here.
-   */
-  private async buildMessageHistory(
-    sessionId: string,
-  ): Promise<Array<{ role: "user" | "assistant"; content: string }>> {
-    const messages = await prisma.chatMessage.findMany({
-      where: { sessionId },
-      orderBy: { createdAt: "asc" },
-      take: MAX_HISTORY_MESSAGES,
-    });
-
-    return messages.map((m) => ({
-      role: m.role as "user" | "assistant",
-      content: m.content,
-    }));
   }
 }
