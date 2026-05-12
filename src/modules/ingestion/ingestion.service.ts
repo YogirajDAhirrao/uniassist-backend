@@ -1,4 +1,3 @@
-
 import { DocumentService } from "../documents/documents.service.js";
 import { UnstructuredService } from "./unstructures.service.js";
 import { processText } from "../../utils/processText.js";
@@ -58,10 +57,6 @@ export class IngestionService {
       // ensure collection
       try {
         await qdrantClient.getCollection(COLLECTION);
-        await qdrantClient.createPayloadIndex(COLLECTION, {
-          field_name: "documentId",
-          field_schema: "keyword", // or "uuid"
-        });
       } catch {
         await qdrantClient.createCollection(COLLECTION, {
           vectors: {
@@ -69,6 +64,15 @@ export class IngestionService {
             distance: "Cosine",
           },
         });
+      }
+      try {
+        await qdrantClient.createPayloadIndex(COLLECTION, {
+          field_name: "documentId",
+          field_schema: "keyword",
+        });
+        console.log(`[Ingestion] Payload index on "documentId" ensured`);
+      } catch {
+        // Index already exists — safe to ignore
       }
 
       // delete old vectors for this document
