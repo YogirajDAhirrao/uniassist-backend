@@ -34,6 +34,7 @@ export class IngestionService {
                 payload: {
                     documentId: chunk.documentId,
                     chunkIndex: chunk.chunkIndex,
+                    content: chunk.content,
                 },
             }));
             // 6. store in vector DB
@@ -41,10 +42,6 @@ export class IngestionService {
             // ensure collection
             try {
                 await qdrantClient.getCollection(COLLECTION);
-                await qdrantClient.createPayloadIndex(COLLECTION, {
-                    field_name: "documentId",
-                    field_schema: "keyword", // or "uuid"
-                });
             }
             catch {
                 await qdrantClient.createCollection(COLLECTION, {
@@ -53,6 +50,16 @@ export class IngestionService {
                         distance: "Cosine",
                     },
                 });
+            }
+            try {
+                await qdrantClient.createPayloadIndex(COLLECTION, {
+                    field_name: "documentId",
+                    field_schema: "keyword",
+                });
+                console.log(`[Ingestion] Payload index on "documentId" ensured`);
+            }
+            catch {
+                // Index already exists — safe to ignore
             }
             // delete old vectors for this document
             await qdrantClient.delete(COLLECTION, {
