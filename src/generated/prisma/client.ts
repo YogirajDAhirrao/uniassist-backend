@@ -69,3 +69,18 @@ export type ChatSession = Prisma.ChatSessionModel
  * 
  */
 export type ChatMessage = Prisma.ChatMessageModel
+/**
+ * Model Course
+ * 
+ */
+export type Course = Prisma.CourseModel
+/**
+ * Model Post
+ * 
+ */
+export type Post = Prisma.PostModel
+/**
+ * Model PostComment
+ * 
+ */
+export type PostComment = Prisma.PostCommentModel

@@ -78,5 +78,16 @@ export class DocumentService {
                 .on("error", reject);
         });
     }
+    async getDcoumentInfo(documentId) {
+        const document = await prisma.document.findUnique({
+            where: {
+                id: documentId,
+            },
+        });
+        if (!document) {
+            throw new Error("Document Not Found");
+        }
+        return document;
+    }
 }
 //# sourceMappingURL=documents.service.js.map

@@ -8,14 +8,13 @@ function hashToken(token: string) {
   return crypto.createHash("sha256").update(token).digest("hex");
 }
 
-
-
 export class AuthService {
   async register(
     name: string,
     email: string,
     password: string,
     role: "student" | "admin",
+    courseId: number,
   ) {
     const existing = await prisma.user.findFirst({
       where: {
@@ -31,6 +30,7 @@ export class AuthService {
         email,
         passwordHash: hashed,
         role,
+        courseId,
       },
     });
     const accessToken = generateAccessToken(user.id, user.role);

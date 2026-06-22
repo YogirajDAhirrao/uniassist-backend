@@ -4,11 +4,11 @@ const isProd = process.env.NODE_ENV === "production";
 const authService = new AuthService();
 export const register = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, courseId } = req.body;
         if (role && !ALLOWED_ROLES.includes(role)) {
             throw new Error(`Invalid userType. Must be one of: ${ALLOWED_ROLES.join(", ")}`);
         }
-        const result = await authService.register(name, email, password, role);
+        const result = await authService.register(name, email, password, role, courseId);
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly: true,
             secure: isProd,

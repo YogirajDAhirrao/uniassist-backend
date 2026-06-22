@@ -56,7 +56,10 @@ export const ModelName = {
   Document: 'Document',
   DocumentChunk: 'DocumentChunk',
   ChatSession: 'ChatSession',
-  ChatMessage: 'ChatMessage'
+  ChatMessage: 'ChatMessage',
+  Course: 'Course',
+  Post: 'Post',
+  PostComment: 'PostComment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -81,6 +84,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   role: 'role',
+  courseId: 'courseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -146,6 +150,41 @@ export const ChatMessageScalarFieldEnum = {
 } as const
 
 export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const CourseScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const PostScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  courseId: 'courseId',
+  authorId: 'authorId',
+  imageUrl: 'imageUrl',
+  documentUrl: 'documentUrl',
+  isPinned: 'isPinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const PostCommentScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type PostCommentScalarFieldEnum = (typeof PostCommentScalarFieldEnum)[keyof typeof PostCommentScalarFieldEnum]
 
 
 export const SortOrder = {

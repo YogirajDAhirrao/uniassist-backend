@@ -44,7 +44,10 @@ export const ModelName = {
     Document: 'Document',
     DocumentChunk: 'DocumentChunk',
     ChatSession: 'ChatSession',
-    ChatMessage: 'ChatMessage'
+    ChatMessage: 'ChatMessage',
+    Course: 'Course',
+    Post: 'Post',
+    PostComment: 'PostComment'
 };
 /*
  * Enums
@@ -61,6 +64,7 @@ export const UserScalarFieldEnum = {
     email: 'email',
     passwordHash: 'passwordHash',
     role: 'role',
+    courseId: 'courseId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -101,6 +105,29 @@ export const ChatMessageScalarFieldEnum = {
     id: 'id',
     sessionId: 'sessionId',
     role: 'role',
+    content: 'content',
+    createdAt: 'createdAt'
+};
+export const CourseScalarFieldEnum = {
+    id: 'id',
+    name: 'name'
+};
+export const PostScalarFieldEnum = {
+    id: 'id',
+    title: 'title',
+    content: 'content',
+    courseId: 'courseId',
+    authorId: 'authorId',
+    imageUrl: 'imageUrl',
+    documentUrl: 'documentUrl',
+    isPinned: 'isPinned',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const PostCommentScalarFieldEnum = {
+    id: 'id',
+    postId: 'postId',
+    userId: 'userId',
     content: 'content',
     createdAt: 'createdAt'
 };

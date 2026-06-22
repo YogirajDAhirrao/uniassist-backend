@@ -52,3 +52,7 @@ export const downloadDocument = async (req: any, res: Response) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const getDocumentStatus = async(req:any,res:Response)=>{
+  
+}

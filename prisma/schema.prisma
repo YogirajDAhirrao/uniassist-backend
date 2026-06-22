@@ -3,10 +3,10 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-  
+
 generator client {
   provider = "prisma-client"
- output   = "../src/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,16 +14,26 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  name          String
-  email         String         @unique
-  passwordHash  String
-  role          Role
+  id           String @id @default(uuid())
+  name         String
+  email        String @unique
+  passwordHash String
+  role         Role
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
   documents     Document[]
   sessions      ChatSession[]
   refreshTokens RefreshToken[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+
+  posts    Post[]
+  comments PostComment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
 }
 
 enum Role {
@@ -32,41 +42,42 @@ enum Role {
 }
 
 model RefreshToken {
-  id          String   @id @default(uuid())
-  tokenHash   String
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  expiresAt   DateTime
-  revoked     Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  tokenHash String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
 
-  ipAddress   String?
-  userAgent   String?
+  ipAddress String?
+  userAgent String?
 }
 
 model Document {
-  id          String           @id @default(uuid())
-  title       String
-  fileUrl     String
-  publicId    String
-  fileType    String?
-  uploadedBy  User             @relation(fields: [uploadedById], references: [id])
+  id           String          @id @default(uuid())
+  title        String
+  fileUrl      String
+  publicId     String
+  fileType     String?
+  uploadedBy   User            @relation(fields: [uploadedById], references: [id])
   uploadedById String
-  status DocumentStatus @default(PROCESSING)
-  chunks      DocumentChunk[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  status       DocumentStatus  @default(PROCESSING)
+  chunks       DocumentChunk[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
 }
 
 model DocumentChunk {
-  id          String    @id @default(uuid())
-  document    Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  documentId  String
-  chunkIndex  Int
-  content     String
-  createdAt   DateTime  @default(now())
-  @@index([documentId])
+  id         String   @id @default(uuid())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId String
+  chunkIndex Int
+  content    String
+  createdAt  DateTime @default(now())
+
   @@unique([documentId, chunkIndex])
+  @@index([documentId])
 }
 
 model ChatSession {
@@ -90,8 +101,61 @@ enum MessageRole {
   user
   assistant
 }
+
 enum DocumentStatus {
   PROCESSING
   READY
   FAILED
+}
+
+model Course {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  users User[]
+  posts Post[]
+}
+
+model Post {
+  id String @id @default(uuid())
+
+  title   String?
+  content String
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  imageUrl    String?
+  documentUrl String?
+
+  isPinned Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments PostComment[]
+
+  @@index([courseId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+model PostComment {
+  id String @id @default(uuid())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  content String
+
+  createdAt DateTime @default(now())
+
+  @@index([postId])
+  @@index([userId])
 }

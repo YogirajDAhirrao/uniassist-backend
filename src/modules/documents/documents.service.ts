@@ -94,4 +94,15 @@ export class DocumentService {
         .on("error", reject);
     });
   }
+  async getDcoumentInfo(documentId: string) {
+    const document = await prisma.document.findUnique({
+      where: {
+        id: documentId,
+      },
+    });
+    if (!document) {
+      throw new Error("Document Not Found");
+    }
+    return document;
+  }
 }
