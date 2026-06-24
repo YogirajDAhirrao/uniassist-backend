@@ -59,7 +59,9 @@ export const ModelName = {
   ChatMessage: 'ChatMessage',
   Course: 'Course',
   Post: 'Post',
-  PostComment: 'PostComment'
+  PostComment: 'PostComment',
+  EmailCampaign: 'EmailCampaign',
+  EmailRecipient: 'EmailRecipient'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -185,6 +187,37 @@ export const PostCommentScalarFieldEnum = {
 } as const
 
 export type PostCommentScalarFieldEnum = (typeof PostCommentScalarFieldEnum)[keyof typeof PostCommentScalarFieldEnum]
+
+
+export const EmailCampaignScalarFieldEnum = {
+  id: 'id',
+  subject: 'subject',
+  body: 'body',
+  courseId: 'courseId',
+  senderId: 'senderId',
+  status: 'status',
+  totalRecipients: 'totalRecipients',
+  sentCount: 'sentCount',
+  failedCount: 'failedCount',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailCampaignScalarFieldEnum = (typeof EmailCampaignScalarFieldEnum)[keyof typeof EmailCampaignScalarFieldEnum]
+
+
+export const EmailRecipientScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  userId: 'userId',
+  email: 'email',
+  status: 'status',
+  sentAt: 'sentAt',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailRecipientScalarFieldEnum = (typeof EmailRecipientScalarFieldEnum)[keyof typeof EmailRecipientScalarFieldEnum]
 
 
 export const SortOrder = {

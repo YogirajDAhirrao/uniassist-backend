@@ -194,6 +194,7 @@ export type CourseWhereInput = {
   name?: Prisma.StringFilter<"Course"> | string
   users?: Prisma.UserListRelationFilter
   posts?: Prisma.PostListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
 }
 
 export type CourseOrderByWithRelationInput = {
@@ -201,6 +202,7 @@ export type CourseOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   users?: Prisma.UserOrderByRelationAggregateInput
   posts?: Prisma.PostOrderByRelationAggregateInput
+  emailCampaigns?: Prisma.EmailCampaignOrderByRelationAggregateInput
 }
 
 export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -211,6 +213,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CourseWhereInput | Prisma.CourseWhereInput[]
   users?: Prisma.UserListRelationFilter
   posts?: Prisma.PostListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
 }, "id" | "name">
 
 export type CourseOrderByWithAggregationInput = {
@@ -235,6 +238,7 @@ export type CourseCreateInput = {
   name: string
   users?: Prisma.UserCreateNestedManyWithoutCourseInput
   posts?: Prisma.PostCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateInput = {
@@ -242,12 +246,14 @@ export type CourseUncheckedCreateInput = {
   name: string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCourseInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.UserUpdateManyWithoutCourseNestedInput
   posts?: Prisma.PostUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateInput = {
@@ -255,6 +261,7 @@ export type CourseUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.UserUncheckedUpdateManyWithoutCourseNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyInput = {
@@ -327,15 +334,31 @@ export type CourseUpdateOneRequiredWithoutPostsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutPostsInput, Prisma.CourseUpdateWithoutPostsInput>, Prisma.CourseUncheckedUpdateWithoutPostsInput>
 }
 
+export type CourseCreateNestedOneWithoutEmailCampaignsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutEmailCampaignsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutEmailCampaignsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutEmailCampaignsInput
+  upsert?: Prisma.CourseUpsertWithoutEmailCampaignsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutEmailCampaignsInput, Prisma.CourseUpdateWithoutEmailCampaignsInput>, Prisma.CourseUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
 export type CourseCreateWithoutUsersInput = {
   name: string
   posts?: Prisma.PostCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutUsersInput = {
   id?: number
   name: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutUsersInput = {
@@ -357,23 +380,27 @@ export type CourseUpdateToOneWithWhereWithoutUsersInput = {
 export type CourseUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutPostsInput = {
   name: string
   users?: Prisma.UserCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutPostsInput = {
   id?: number
   name: string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutPostsInput = {
@@ -395,12 +422,56 @@ export type CourseUpdateToOneWithWhereWithoutPostsInput = {
 export type CourseUpdateWithoutPostsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.UserUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutPostsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.UserUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutEmailCampaignsInput = {
+  name: string
+  users?: Prisma.UserCreateNestedManyWithoutCourseInput
+  posts?: Prisma.PostCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutEmailCampaignsInput = {
+  id?: number
+  name: string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCourseInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutEmailCampaignsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+}
+
+export type CourseUpsertWithoutEmailCampaignsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutEmailCampaignsInput, Prisma.CourseUncheckedUpdateWithoutEmailCampaignsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutEmailCampaignsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutEmailCampaignsInput, Prisma.CourseUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
+export type CourseUpdateWithoutEmailCampaignsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  users?: Prisma.UserUpdateManyWithoutCourseNestedInput
+  posts?: Prisma.PostUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutEmailCampaignsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCourseNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 
@@ -411,11 +482,13 @@ export type CourseUncheckedUpdateWithoutPostsInput = {
 export type CourseCountOutputType = {
   users: number
   posts: number
+  emailCampaigns: number
 }
 
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | CourseCountOutputTypeCountUsersArgs
   posts?: boolean | CourseCountOutputTypeCountPostsArgs
+  emailCampaigns?: boolean | CourseCountOutputTypeCountEmailCampaignsArgs
 }
 
 /**
@@ -442,12 +515,20 @@ export type CourseCountOutputTypeCountPostsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.PostWhereInput
 }
 
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountEmailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailCampaignWhereInput
+}
+
 
 export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   users?: boolean | Prisma.Course$usersArgs<ExtArgs>
   posts?: boolean | Prisma.Course$postsArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.Course$emailCampaignsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
@@ -470,6 +551,7 @@ export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Course$usersArgs<ExtArgs>
   posts?: boolean | Prisma.Course$postsArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.Course$emailCampaignsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -480,6 +562,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     users: Prisma.$UserPayload<ExtArgs>[]
     posts: Prisma.$PostPayload<ExtArgs>[]
+    emailCampaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -880,6 +963,7 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   users<T extends Prisma.Course$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   posts<T extends Prisma.Course$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailCampaigns<T extends Prisma.Course$emailCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$emailCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1344,6 +1428,30 @@ export type Course$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.PostScalarFieldEnum | Prisma.PostScalarFieldEnum[]
+}
+
+/**
+ * Course.emailCampaigns
+ */
+export type Course$emailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailCampaign
+   */
+  select?: Prisma.EmailCampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailCampaign
+   */
+  omit?: Prisma.EmailCampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailCampaignInclude<ExtArgs> | null
+  where?: Prisma.EmailCampaignWhereInput
+  orderBy?: Prisma.EmailCampaignOrderByWithRelationInput | Prisma.EmailCampaignOrderByWithRelationInput[]
+  cursor?: Prisma.EmailCampaignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailCampaignScalarFieldEnum | Prisma.EmailCampaignScalarFieldEnum[]
 }
 
 /**

@@ -62,3 +62,13 @@ export type Post = Prisma.PostModel
  * 
  */
 export type PostComment = Prisma.PostCommentModel
+/**
+ * Model EmailCampaign
+ * 
+ */
+export type EmailCampaign = Prisma.EmailCampaignModel
+/**
+ * Model EmailRecipient
+ * 
+ */
+export type EmailRecipient = Prisma.EmailRecipientModel

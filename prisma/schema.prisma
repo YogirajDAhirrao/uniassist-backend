@@ -30,8 +30,10 @@ model User {
   posts    Post[]
   comments PostComment[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  sentEmailCampaigns EmailCampaign[] @relation("CampaignSender")
+  emailRecipients    EmailRecipient[] @relation("RecipientUser")
 
   @@index([courseId])
 }
@@ -112,8 +114,9 @@ model Course {
   id   Int    @id @default(autoincrement())
   name String @unique
 
-  users User[]
-  posts Post[]
+  users          User[]
+  posts          Post[]
+  emailCampaigns EmailCampaign[]
 }
 
 model Post {
@@ -158,4 +161,69 @@ model PostComment {
 
   @@index([postId])
   @@index([userId])
+}
+
+model EmailCampaign {
+  id String @id @default(uuid())
+
+  subject String
+  body    String
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  senderId String
+  sender   User @relation("CampaignSender", fields: [senderId], references: [id])
+
+  status EmailStatus @default(DRAFT)
+
+  recipients EmailRecipient[]
+
+  totalRecipients Int @default(0)
+  sentCount       Int @default(0)
+  failedCount     Int @default(0)
+
+  sentAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([courseId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model EmailRecipient {
+  id String @id @default(uuid())
+
+  campaignId String
+  campaign   EmailCampaign @relation(fields: [campaignId], references: [id])
+
+  userId String
+  user   User @relation("RecipientUser", fields: [userId], references: [id])
+
+  email String
+
+  status RecipientStatus @default(PENDING)
+
+  sentAt       DateTime?
+  errorMessage String?
+
+  createdAt DateTime @default(now())
+  @@unique([campaignId, userId])
+
+  @@index([campaignId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum EmailStatus {
+  DRAFT
+  SENDING
+  SENT
+  FAILED
+}
+
+enum RecipientStatus {
+  PENDING
+  SENT
+  FAILED
 }

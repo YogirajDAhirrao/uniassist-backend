@@ -246,6 +246,8 @@ export type UserWhereInput = {
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   posts?: Prisma.PostListRelationFilter
   comments?: Prisma.PostCommentListRelationFilter
+  sentEmailCampaigns?: Prisma.EmailCampaignListRelationFilter
+  emailRecipients?: Prisma.EmailRecipientListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -263,6 +265,8 @@ export type UserOrderByWithRelationInput = {
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   posts?: Prisma.PostOrderByRelationAggregateInput
   comments?: Prisma.PostCommentOrderByRelationAggregateInput
+  sentEmailCampaigns?: Prisma.EmailCampaignOrderByRelationAggregateInput
+  emailRecipients?: Prisma.EmailRecipientOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -283,6 +287,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   posts?: Prisma.PostListRelationFilter
   comments?: Prisma.PostCommentListRelationFilter
+  sentEmailCampaigns?: Prisma.EmailCampaignListRelationFilter
+  emailRecipients?: Prisma.EmailRecipientListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -329,6 +335,8 @@ export type UserCreateInput = {
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -345,6 +353,8 @@ export type UserUncheckedCreateInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -361,6 +371,8 @@ export type UserUpdateInput = {
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -377,6 +389,8 @@ export type UserUncheckedUpdateInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -599,6 +613,34 @@ export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommentsInput, Prisma.UserUpdateWithoutCommentsInput>, Prisma.UserUncheckedUpdateWithoutCommentsInput>
 }
 
+export type UserCreateNestedOneWithoutSentEmailCampaignsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSentEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutSentEmailCampaignsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSentEmailCampaignsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSentEmailCampaignsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSentEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutSentEmailCampaignsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSentEmailCampaignsInput
+  upsert?: Prisma.UserUpsertWithoutSentEmailCampaignsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSentEmailCampaignsInput, Prisma.UserUpdateWithoutSentEmailCampaignsInput>, Prisma.UserUncheckedUpdateWithoutSentEmailCampaignsInput>
+}
+
+export type UserCreateNestedOneWithoutEmailRecipientsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailRecipientsInput, Prisma.UserUncheckedCreateWithoutEmailRecipientsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailRecipientsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEmailRecipientsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailRecipientsInput, Prisma.UserUncheckedCreateWithoutEmailRecipientsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailRecipientsInput
+  upsert?: Prisma.UserUpsertWithoutEmailRecipientsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailRecipientsInput, Prisma.UserUpdateWithoutEmailRecipientsInput>, Prisma.UserUncheckedUpdateWithoutEmailRecipientsInput>
+}
+
 export type UserCreateWithoutRefreshTokensInput = {
   id?: string
   name: string
@@ -612,6 +654,8 @@ export type UserCreateWithoutRefreshTokensInput = {
   sessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -627,6 +671,8 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   sessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -658,6 +704,8 @@ export type UserUpdateWithoutRefreshTokensInput = {
   sessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -673,6 +721,8 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   sessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDocumentsInput = {
@@ -688,6 +738,8 @@ export type UserCreateWithoutDocumentsInput = {
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDocumentsInput = {
@@ -703,6 +755,8 @@ export type UserUncheckedCreateWithoutDocumentsInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDocumentsInput = {
@@ -734,6 +788,8 @@ export type UserUpdateWithoutDocumentsInput = {
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDocumentsInput = {
@@ -749,6 +805,8 @@ export type UserUncheckedUpdateWithoutDocumentsInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -764,6 +822,8 @@ export type UserCreateWithoutSessionsInput = {
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -779,6 +839,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -810,6 +872,8 @@ export type UserUpdateWithoutSessionsInput = {
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -825,6 +889,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCourseInput = {
@@ -840,6 +906,8 @@ export type UserCreateWithoutCourseInput = {
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCourseInput = {
@@ -855,6 +923,8 @@ export type UserUncheckedCreateWithoutCourseInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCourseInput = {
@@ -910,6 +980,8 @@ export type UserCreateWithoutPostsInput = {
   sessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostsInput = {
@@ -925,6 +997,8 @@ export type UserUncheckedCreateWithoutPostsInput = {
   sessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostsInput = {
@@ -956,6 +1030,8 @@ export type UserUpdateWithoutPostsInput = {
   sessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostsInput = {
@@ -971,6 +1047,8 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   sessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -986,6 +1064,8 @@ export type UserCreateWithoutCommentsInput = {
   sessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1001,6 +1081,8 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   sessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1032,6 +1114,8 @@ export type UserUpdateWithoutCommentsInput = {
   sessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1047,6 +1131,176 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   sessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSentEmailCampaignsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  role: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  course: Prisma.CourseCreateNestedOneWithoutUsersInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  sessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  emailRecipients?: Prisma.EmailRecipientCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSentEmailCampaignsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  role: $Enums.Role
+  courseId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  sessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSentEmailCampaignsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSentEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutSentEmailCampaignsInput>
+}
+
+export type UserUpsertWithoutSentEmailCampaignsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSentEmailCampaignsInput, Prisma.UserUncheckedUpdateWithoutSentEmailCampaignsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSentEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutSentEmailCampaignsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSentEmailCampaignsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSentEmailCampaignsInput, Prisma.UserUncheckedUpdateWithoutSentEmailCampaignsInput>
+}
+
+export type UserUpdateWithoutSentEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  course?: Prisma.CourseUpdateOneRequiredWithoutUsersNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  sessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSentEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  courseId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  sessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEmailRecipientsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  role: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  course: Prisma.CourseCreateNestedOneWithoutUsersInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  sessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.PostCommentCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutSenderInput
+}
+
+export type UserUncheckedCreateWithoutEmailRecipientsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  role: $Enums.Role
+  courseId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  sessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutUserInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutSenderInput
+}
+
+export type UserCreateOrConnectWithoutEmailRecipientsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailRecipientsInput, Prisma.UserUncheckedCreateWithoutEmailRecipientsInput>
+}
+
+export type UserUpsertWithoutEmailRecipientsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEmailRecipientsInput, Prisma.UserUncheckedUpdateWithoutEmailRecipientsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailRecipientsInput, Prisma.UserUncheckedCreateWithoutEmailRecipientsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEmailRecipientsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEmailRecipientsInput, Prisma.UserUncheckedUpdateWithoutEmailRecipientsInput>
+}
+
+export type UserUpdateWithoutEmailRecipientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  course?: Prisma.CourseUpdateOneRequiredWithoutUsersNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  sessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEmailRecipientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  courseId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  sessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
 }
 
 export type UserCreateManyCourseInput = {
@@ -1072,6 +1326,8 @@ export type UserUpdateWithoutCourseInput = {
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCourseInput = {
@@ -1087,6 +1343,8 @@ export type UserUncheckedUpdateWithoutCourseInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.PostCommentUncheckedUpdateManyWithoutUserNestedInput
+  sentEmailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutSenderNestedInput
+  emailRecipients?: Prisma.EmailRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutCourseInput = {
@@ -1110,6 +1368,8 @@ export type UserCountOutputType = {
   refreshTokens: number
   posts: number
   comments: number
+  sentEmailCampaigns: number
+  emailRecipients: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1118,6 +1378,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   posts?: boolean | UserCountOutputTypeCountPostsArgs
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
+  sentEmailCampaigns?: boolean | UserCountOutputTypeCountSentEmailCampaignsArgs
+  emailRecipients?: boolean | UserCountOutputTypeCountEmailRecipientsArgs
 }
 
 /**
@@ -1165,6 +1427,20 @@ export type UserCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.PostCommentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSentEmailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailCampaignWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEmailRecipientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailRecipientWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1181,6 +1457,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   posts?: boolean | Prisma.User$postsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
+  sentEmailCampaigns?: boolean | Prisma.User$sentEmailCampaignsArgs<ExtArgs>
+  emailRecipients?: boolean | Prisma.User$emailRecipientsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1227,6 +1505,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   posts?: boolean | Prisma.User$postsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
+  sentEmailCampaigns?: boolean | Prisma.User$sentEmailCampaignsArgs<ExtArgs>
+  emailRecipients?: boolean | Prisma.User$emailRecipientsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1245,6 +1525,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
     posts: Prisma.$PostPayload<ExtArgs>[]
     comments: Prisma.$PostCommentPayload<ExtArgs>[]
+    sentEmailCampaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
+    emailRecipients: Prisma.$EmailRecipientPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1655,6 +1937,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   posts<T extends Prisma.User$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sentEmailCampaigns<T extends Prisma.User$sentEmailCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentEmailCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailRecipients<T extends Prisma.User$emailRecipientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailRecipientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailRecipientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2205,6 +2489,54 @@ export type User$commentsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.PostCommentScalarFieldEnum | Prisma.PostCommentScalarFieldEnum[]
+}
+
+/**
+ * User.sentEmailCampaigns
+ */
+export type User$sentEmailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailCampaign
+   */
+  select?: Prisma.EmailCampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailCampaign
+   */
+  omit?: Prisma.EmailCampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailCampaignInclude<ExtArgs> | null
+  where?: Prisma.EmailCampaignWhereInput
+  orderBy?: Prisma.EmailCampaignOrderByWithRelationInput | Prisma.EmailCampaignOrderByWithRelationInput[]
+  cursor?: Prisma.EmailCampaignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailCampaignScalarFieldEnum | Prisma.EmailCampaignScalarFieldEnum[]
+}
+
+/**
+ * User.emailRecipients
+ */
+export type User$emailRecipientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailRecipient
+   */
+  select?: Prisma.EmailRecipientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailRecipient
+   */
+  omit?: Prisma.EmailRecipientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailRecipientInclude<ExtArgs> | null
+  where?: Prisma.EmailRecipientWhereInput
+  orderBy?: Prisma.EmailRecipientOrderByWithRelationInput | Prisma.EmailRecipientOrderByWithRelationInput[]
+  cursor?: Prisma.EmailRecipientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailRecipientScalarFieldEnum | Prisma.EmailRecipientScalarFieldEnum[]
 }
 
 /**
