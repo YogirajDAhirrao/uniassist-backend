@@ -27,7 +27,7 @@ export const register = async (req: Request, res: Response) => {
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: isProd,
-      sameSite: isProd ? "strict" : "lax",
+      sameSite: isProd ? "none" : "lax",
     });
 
     return res.status(201).json({
@@ -48,7 +48,7 @@ export const login = async (req: Request, res: Response) => {
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: isProd,
-      sameSite: isProd ? "strict" : "lax",
+      sameSite: isProd ? "none" : "lax",
     });
 
     return res.status(201).json({
@@ -66,7 +66,11 @@ export const logout = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) throw new Error("No Refresh token provided");
     const result = await authService.logout(refreshToken);
-    res.clearCookie("refreshToken");
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+    });
     res.json({
       message: "success",
     });

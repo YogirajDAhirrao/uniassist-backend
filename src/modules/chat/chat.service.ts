@@ -6,6 +6,7 @@ import {
   ChatMessageResponse,
   ChatSessionWithMessages,
   CreateSessionResponse,
+  DocumentSource,
   StreamChunk,
 } from "./chat.types.js";
 
@@ -77,7 +78,7 @@ export class ChatService {
     await this.assertSessionOwner(sessionId, userId);
 
     // 1. Fetch history BEFORE saving the new user message
-    const messages = await this.buildMessagesWithContext(
+    const { messages, sources } = await this.buildMessagesWithContext(
       sessionId,
       userContent,
     );
@@ -109,6 +110,7 @@ export class ChatService {
         role: "assistant",
         content: assistantContent,
         createdAt: saved.createdAt,
+        sources,
       };
     } catch (err: any) {
       if (err?.status === 429) {
@@ -126,7 +128,7 @@ export class ChatService {
     await this.assertSessionOwner(sessionId, userId);
 
     // 1. Fetch history BEFORE saving the new user message
-    const messages = await this.buildMessagesWithContext(
+    const { messages, sources } = await this.buildMessagesWithContext(
       sessionId,
       userContent,
     );
@@ -135,6 +137,11 @@ export class ChatService {
     await prisma.chatMessage.create({
       data: { sessionId, role: "user", content: userContent },
     });
+
+    // 2b. Emit sources immediately so the client can display citations
+    if (sources.length > 0) {
+      yield { type: "sources", sources };
+    }
 
     let fullContent = "";
 
@@ -179,20 +186,21 @@ export class ChatService {
   private async buildMessagesWithContext(
     sessionId: string,
     userQuestion: string,
-  ): Promise<
-    Array<{ role: "system" | "user" | "assistant"; content: string }>
-  > {
+  ): Promise<{
+    messages: Array<{ role: "system" | "user" | "assistant"; content: string }>;
+    sources: DocumentSource[];
+  }> {
     // 1. Retrieve relevant chunks from Qdrant
-    const context = await this.retrieveContext(userQuestion);
+    const { contextText, sources } = await this.retrieveContext(userQuestion);
 
     // 2. Build system prompt
-    const systemContent = context
+    const systemContent = contextText
       ? `You are a helpful AI assistant. Answer questions based on the provided context.
 If the answer is not in the context, answer from your general knowledge but mention it.
 Always be clear and concise.
 
 CONTEXT FROM DOCUMENTS:
-${context}`
+${contextText}`
       : `You are a helpful AI assistant. Answer questions clearly and concisely.
 If you don't know something, say so honestly.`;
 
@@ -200,14 +208,19 @@ If you don't know something, say so honestly.`;
     const history = await this.buildMessageHistory(sessionId);
 
     // 4. Append current user question at the end
-    return [
-      { role: "system", content: systemContent },
-      ...history,
-      { role: "user", content: userQuestion },
-    ];
+    return {
+      messages: [
+        { role: "system", content: systemContent },
+        ...history,
+        { role: "user", content: userQuestion },
+      ],
+      sources,
+    };
   }
 
-  private async retrieveContext(question: string): Promise<string | null> {
+  private async retrieveContext(
+    question: string,
+  ): Promise<{ contextText: string | null; sources: DocumentSource[] }> {
     try {
       const questionVector = await getEmbedding(question);
 
@@ -218,7 +231,26 @@ If you don't know something, say so honestly.`;
         score_threshold: 0.5,
       });
 
-      if (!results || results.length === 0) return null;
+      if (!results || results.length === 0) {
+        return { contextText: null, sources: [] };
+      }
+
+      // Look up document titles for the matched documentIds
+      const documentIds = [
+        ...new Set(
+          results
+            .map((r) => (r.payload as any)?.documentId as string)
+            .filter(Boolean),
+        ),
+      ];
+
+      const documents = await prisma.document.findMany({
+        where: { id: { in: documentIds } },
+        select: { id: true, title: true },
+      });
+      const titleMap = new Map(documents.map((d) => [d.id, d.title]));
+
+      const sources: DocumentSource[] = [];
 
       const contextText = results
         .map((r, i) => {
@@ -227,15 +259,25 @@ If you don't know something, say so honestly.`;
             documentId?: string;
             chunkIndex?: number;
           };
+
+          if (payload.documentId) {
+            sources.push({
+              documentId: payload.documentId,
+              title: titleMap.get(payload.documentId) ?? "Unknown Document",
+              chunkIndex: payload.chunkIndex ?? i,
+              score: Math.round(r.score * 100) / 100,
+            });
+          }
+
           return `[${i + 1}] ${payload.content ?? ""}`;
         })
         .filter((text) => text.trim().length > 4)
         .join("\n\n");
 
-      return contextText || null;
+      return { contextText: contextText || null, sources };
     } catch (err) {
       console.error("[RAG] Context retrieval failed:", err);
-      return null;
+      return { contextText: null, sources: [] };
     }
   }
 

@@ -8,11 +8,19 @@ export interface SendMessageDto {
   content: string;
 }
 
+export interface DocumentSource {
+  documentId: string;
+  title: string;
+  chunkIndex: number;
+  score: number;
+}
+
 export interface ChatMessageResponse {
   id: string;
   role: "user" | "assistant";
   content: string;
   createdAt: Date;
+  sources?: DocumentSource[];
 }
 
 export interface ChatSessionWithMessages {
@@ -22,7 +30,8 @@ export interface ChatSessionWithMessages {
 }
 
 export interface StreamChunk {
-  type: "delta" | "done" | "error";
+  type: "delta" | "sources" | "done" | "error";
   content?: string;
+  sources?: DocumentSource[];
   error?: string;
 }
