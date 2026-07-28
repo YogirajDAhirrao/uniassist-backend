@@ -40,6 +40,36 @@ export const downloadDocument = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
+// GET /api/document — list all documents (admin)
+export const listDocuments = async (req, res) => {
+    try {
+        const documents = await documentService.listDocuments();
+        return res.json(documents);
+    }
+    catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+};
+// GET /api/document/:id — get document + status
 export const getDocumentStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const document = await documentService.getDocumentStatus(id);
+        return res.json(document);
+    }
+    catch (error) {
+        return res.status(404).json({ message: error.message });
+    }
+};
+// DELETE /api/document/:id — delete document, purge vectors + Cloudinary
+export const deleteDocument = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await documentService.deleteDocument(id);
+        return res.json(result);
+    }
+    catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
 };
 //# sourceMappingURL=documents.controller.js.map

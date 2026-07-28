@@ -47,7 +47,9 @@ export const ModelName = {
     ChatMessage: 'ChatMessage',
     Course: 'Course',
     Post: 'Post',
-    PostComment: 'PostComment'
+    PostComment: 'PostComment',
+    EmailCampaign: 'EmailCampaign',
+    EmailRecipient: 'EmailRecipient'
 };
 /*
  * Enums
@@ -129,6 +131,29 @@ export const PostCommentScalarFieldEnum = {
     postId: 'postId',
     userId: 'userId',
     content: 'content',
+    createdAt: 'createdAt'
+};
+export const EmailCampaignScalarFieldEnum = {
+    id: 'id',
+    subject: 'subject',
+    body: 'body',
+    courseId: 'courseId',
+    senderId: 'senderId',
+    status: 'status',
+    totalRecipients: 'totalRecipients',
+    sentCount: 'sentCount',
+    failedCount: 'failedCount',
+    sentAt: 'sentAt',
+    createdAt: 'createdAt'
+};
+export const EmailRecipientScalarFieldEnum = {
+    id: 'id',
+    campaignId: 'campaignId',
+    userId: 'userId',
+    email: 'email',
+    status: 'status',
+    sentAt: 'sentAt',
+    errorMessage: 'errorMessage',
     createdAt: 'createdAt'
 };
 export const SortOrder = {

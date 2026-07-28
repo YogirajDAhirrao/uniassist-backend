@@ -2,7 +2,7 @@ import https from "https";
 import FormData from "form-data";
 
 export class UnstructuredService {
-  async extractText(fileBuffer: Buffer) {
+  async extractText(fileBuffer: Buffer): Promise<any> {
     const formData = new FormData();
 
     formData.append("files", fileBuffer, {

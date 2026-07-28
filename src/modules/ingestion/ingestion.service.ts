@@ -17,7 +17,7 @@ export class IngestionService {
 
       // 2. call unstructured API
       const extractedData = await unstructuredService.extractText(fileBuffer);
-      console.log("Extracted Data:", extractedData);
+      console.log("Extracted elements:", extractedData.length);
 
       // 3. filter + extract chunks
       const chunks = processText(extractedData as any);
@@ -27,6 +27,9 @@ export class IngestionService {
         where: { documentId },
       });
 
+      console.time("transaction");
+      console.log("Chunks:", chunks.length);
+
       const createdChunks = await prisma.$transaction(
         chunks.map((chunk, index) =>
           prisma.documentChunk.create({
@@ -34,6 +37,7 @@ export class IngestionService {
           }),
         ),
       );
+      console.timeEnd("transaction");
 
       console.log("Chunks stored:", createdChunks.length);
 

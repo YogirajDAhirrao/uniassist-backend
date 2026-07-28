@@ -20,4 +20,15 @@ export const DocumentStatus = {
     READY: 'READY',
     FAILED: 'FAILED'
 };
+export const EmailStatus = {
+    DRAFT: 'DRAFT',
+    SENDING: 'SENDING',
+    SENT: 'SENT',
+    FAILED: 'FAILED'
+};
+export const RecipientStatus = {
+    PENDING: 'PENDING',
+    SENT: 'SENT',
+    FAILED: 'FAILED'
+};
 //# sourceMappingURL=enums.js.map

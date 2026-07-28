@@ -54,7 +54,7 @@ export class ChatService {
     async sendMessage(sessionId, userId, userContent) {
         await this.assertSessionOwner(sessionId, userId);
         // 1. Fetch history BEFORE saving the new user message
-        const messages = await this.buildMessagesWithContext(sessionId, userContent);
+        const { messages, sources } = await this.buildMessagesWithContext(sessionId, userContent);
         // 2. Save user message AFTER building history
         await prisma.chatMessage.create({
             data: { sessionId, role: "user", content: userContent },
@@ -77,6 +77,7 @@ export class ChatService {
                 role: "assistant",
                 content: assistantContent,
                 createdAt: saved.createdAt,
+                sources,
             };
         }
         catch (err) {
@@ -89,11 +90,15 @@ export class ChatService {
     async *streamMessage(sessionId, userId, userContent) {
         await this.assertSessionOwner(sessionId, userId);
         // 1. Fetch history BEFORE saving the new user message
-        const messages = await this.buildMessagesWithContext(sessionId, userContent);
+        const { messages, sources } = await this.buildMessagesWithContext(sessionId, userContent);
         // 2. Save user message AFTER building history
         await prisma.chatMessage.create({
             data: { sessionId, role: "user", content: userContent },
         });
+        // 2b. Emit sources immediately so the client can display citations
+        if (sources.length > 0) {
+            yield { type: "sources", sources };
+        }
         let fullContent = "";
         try {
             const stream = await groq.chat.completions.create({
@@ -131,25 +136,28 @@ export class ChatService {
     // ── RAG + History ───────────────────────────────────────────────────────────
     async buildMessagesWithContext(sessionId, userQuestion) {
         // 1. Retrieve relevant chunks from Qdrant
-        const context = await this.retrieveContext(userQuestion);
+        const { contextText, sources } = await this.retrieveContext(userQuestion);
         // 2. Build system prompt
-        const systemContent = context
+        const systemContent = contextText
             ? `You are a helpful AI assistant. Answer questions based on the provided context.
 If the answer is not in the context, answer from your general knowledge but mention it.
 Always be clear and concise.
 
 CONTEXT FROM DOCUMENTS:
-${context}`
+${contextText}`
             : `You are a helpful AI assistant. Answer questions clearly and concisely.
 If you don't know something, say so honestly.`;
         // 3. Fetch existing history (does NOT include current message yet)
         const history = await this.buildMessageHistory(sessionId);
         // 4. Append current user question at the end
-        return [
-            { role: "system", content: systemContent },
-            ...history,
-            { role: "user", content: userQuestion },
-        ];
+        return {
+            messages: [
+                { role: "system", content: systemContent },
+                ...history,
+                { role: "user", content: userQuestion },
+            ],
+            sources,
+        };
     }
     async retrieveContext(question) {
         try {
@@ -160,20 +168,41 @@ If you don't know something, say so honestly.`;
                 with_payload: true,
                 score_threshold: 0.5,
             });
-            if (!results || results.length === 0)
-                return null;
+            if (!results || results.length === 0) {
+                return { contextText: null, sources: [] };
+            }
+            // Look up document titles for the matched documentIds
+            const documentIds = [
+                ...new Set(results
+                    .map((r) => r.payload?.documentId)
+                    .filter(Boolean)),
+            ];
+            const documents = await prisma.document.findMany({
+                where: { id: { in: documentIds } },
+                select: { id: true, title: true },
+            });
+            const titleMap = new Map(documents.map((d) => [d.id, d.title]));
+            const sources = [];
             const contextText = results
                 .map((r, i) => {
                 const payload = r.payload;
+                if (payload.documentId) {
+                    sources.push({
+                        documentId: payload.documentId,
+                        title: titleMap.get(payload.documentId) ?? "Unknown Document",
+                        chunkIndex: payload.chunkIndex ?? i,
+                        score: Math.round(r.score * 100) / 100,
+                    });
+                }
                 return `[${i + 1}] ${payload.content ?? ""}`;
             })
                 .filter((text) => text.trim().length > 4)
                 .join("\n\n");
-            return contextText || null;
+            return { contextText: contextText || null, sources };
         }
         catch (err) {
             console.error("[RAG] Context retrieval failed:", err);
-            return null;
+            return { contextText: null, sources: [] };
         }
     }
     async buildMessageHistory(sessionId) {

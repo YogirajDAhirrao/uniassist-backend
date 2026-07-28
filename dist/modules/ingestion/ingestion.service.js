@@ -21,9 +21,11 @@ export class IngestionService {
             await prisma.documentChunk.deleteMany({
                 where: { documentId },
             });
+            console.time("transaction");
             const createdChunks = await prisma.$transaction(chunks.map((chunk, index) => prisma.documentChunk.create({
                 data: { documentId, chunkIndex: index, content: chunk },
             })));
+            console.timeEnd("transaction");
             console.log("Chunks stored:", createdChunks.length);
             // 5. generate embeddings
             const embeddings = await Promise.all(createdChunks.map((chunk) => getEmbedding(chunk.content)));
