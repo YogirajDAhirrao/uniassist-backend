@@ -224,15 +224,20 @@ If you don't know something, say so honestly.`;
     try {
       const questionVector = await getEmbedding(question);
 
-      const results = await qdrantClient.search(COLLECTION, {
-        vector: questionVector,
+      const result = await qdrantClient.query(COLLECTION, {
+        query: questionVector,
         limit: TOP_K_CHUNKS,
         with_payload: true,
         score_threshold: 0.5,
       });
 
-      if (!results || results.length === 0) {
-        return { contextText: null, sources: [] };
+      const results = result.points;
+
+      if (results.length === 0) {
+        return {
+          contextText: null,
+          sources: [],
+        };
       }
 
       // Look up document titles for the matched documentIds

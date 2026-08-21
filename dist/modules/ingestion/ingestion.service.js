@@ -14,7 +14,7 @@ export class IngestionService {
             console.log("Buffer size:", fileBuffer.length);
             // 2. call unstructured API
             const extractedData = await unstructuredService.extractText(fileBuffer);
-            console.log("Extracted Data:", extractedData);
+            console.log("Extracted elements:", extractedData.length);
             // 3. filter + extract chunks
             const chunks = processText(extractedData);
             // 4. store chunks in Postgres
@@ -22,6 +22,7 @@ export class IngestionService {
                 where: { documentId },
             });
             console.time("transaction");
+            console.log("Chunks:", chunks.length);
             const createdChunks = await prisma.$transaction(chunks.map((chunk, index) => prisma.documentChunk.create({
                 data: { documentId, chunkIndex: index, content: chunk },
             })));

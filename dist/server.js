@@ -1,6 +1,6 @@
 import app from "./app.js";
-app.get("/", (req, res) => {
-    res.send("Test");
+app.get("/health", (req, res) => {
+    res.send("OK");
 });
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
