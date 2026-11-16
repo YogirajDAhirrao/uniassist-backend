@@ -10,7 +10,7 @@ import {
   StreamChunk,
 } from "./chat.types.js";
 
-const MODEL = "llama-3.3-70b-versatile";
+const MODEL = "openai/gpt-oss-120b";
 const MAX_HISTORY_MESSAGES = 20;
 const TOP_K_CHUNKS = 4;
 const COLLECTION = "documents";
